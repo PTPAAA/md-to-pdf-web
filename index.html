@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>Markdown to PDF Converter</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 20px; display: flex; flex-direction: column; height: 100vh; box-sizing: border-box; background: #f8fafc; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+    .title { font-size: 20px; font-weight: bold; color: #1e293b; }
+    .btn { background: #2563eb; color: #fff; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; }
+    .btn:hover { background: #1d4ed8; }
+    .container { display: flex; gap: 20px; flex: 1; min-height: 0; }
+    .pane { flex: 1; display: flex; flex-direction: column; background: #fff; border-radius: 8px; border: 1px solid #e2e8f0; overflow: hidden; }
+    .pane-header { padding: 10px 15px; background: #f1f5f9; border-bottom: 1px solid #e2e8f0; font-size: 13px; font-weight: 600; color: #64748b; }
+    textarea { flex: 1; border: none; padding: 15px; resize: none; outline: none; font-family: monospace; font-size: 14px; line-height: 1.6; }
+    .preview { flex: 1; padding: 20px; overflow-y: auto; line-height: 1.6; color: #334155; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="title">📄 Markdown to PDF 在线转换器</div>
+    <button class="btn" onclick="exportPDF()">导出为 PDF</button>
+  </div>
+  <div class="container">
+    <div class="pane">
+      <div class="pane-header">Markdown 输入</div>
+      <textarea id="editor" placeholder="在此输入 Markdown 内容..."># Markdown to PDF 转换示例
+
+这是一个纯前端驱动的轻量级 Markdown 转 PDF 工具，保护隐私零上传。
+
+## 核心特性
+- **本地实时渲染**：所见即所得
+- **高质量 PDF 导出**：自动分页与排版
+- **隐私保护**：所有处理在浏览器本地完成
+
+### 示例代码
+```python
+def hello():
+    print("Markdown to PDF!")
+```
+</textarea>
+    </div>
+    <div class="pane">
+      <div class="pane-header">实时预览</div>
+      <div id="preview" class="preview"></div>
+    </div>
+  </div>
+
+  <script>
+    const editor = document.getElementById('editor');
+    const preview = document.getElementById('preview');
+    function update() { preview.innerHTML = marked.parse(editor.value); }
+    editor.addEventListener('input', update);
+    update();
+
+    function exportPDF() {
+      const opt = { margin: 15, filename: 'document.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
+      html2pdf().set(opt).from(preview).save();
+    }
+  </script>
+</body>
+</html>
